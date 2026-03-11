@@ -18,8 +18,14 @@ export const api = {
       body: JSON.stringify(item),
     });
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error ?? `Failed to create item: ${response.status}`);
+      let message = `Failed to create item: ${response.status}`;
+      try {
+        const body = await response.json();
+        if (body.error) message = body.error;
+      } catch {
+        // ignore JSON parse errors; use default message
+      }
+      throw new Error(message);
     }
     return response.json();
   },

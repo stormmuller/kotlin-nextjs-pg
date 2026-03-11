@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View,
   FlatList,
@@ -56,7 +56,10 @@ export default function HomeScreen({ navigation }: Props) {
     ]);
   };
 
-  const total = items.reduce((sum, item) => sum + parseFloat(item.price), 0);
+  const total = useMemo(
+    () => items.reduce((sum, item) => sum + parseFloat(item.price), 0),
+    [items]
+  );
 
   return (
     <View style={styles.container}>
