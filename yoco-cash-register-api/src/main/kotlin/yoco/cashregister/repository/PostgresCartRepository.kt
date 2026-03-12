@@ -7,8 +7,6 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upsert
-import za.co.yoco.cashregister.api.Carts
-import za.co.yoco.cashregister.api.Items
 import za.co.yoco.cashregister.domain.Cart
 import za.co.yoco.cashregister.domain.Item
 import za.co.yoco.cashregister.domain.Money

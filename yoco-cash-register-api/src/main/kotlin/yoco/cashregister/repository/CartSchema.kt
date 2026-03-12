@@ -1,4 +1,4 @@
-package za.co.yoco.cashregister.api
+package za.co.yoco.cashregister.repository
 
 import org.jetbrains.exposed.sql.Table
 
