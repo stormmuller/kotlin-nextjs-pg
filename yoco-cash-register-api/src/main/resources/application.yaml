@@ -1,7 +1,7 @@
 ktor:
     application:
         modules:
-            - za.co.yoco.cashregister.api.ApplicationKt.module
+            - za.co.yoco.cashregister.ApplicationKt.module
     deployment:
         port: 8080
 postgres:
