@@ -1,8 +1,10 @@
-package za.co.yoco.cashregister.api
+package za.co.yoco.cashregister.api.domain
 
+import kotlinx.serialization.Serializable
 import kotlin.math.abs
 
 @JvmInline
+@Serializable
 value class Money(val cents: Long) {
 
     constructor(whole: Long, cents: Int) : this(whole * 100 + cents)
@@ -15,7 +17,7 @@ value class Money(val cents: Long) {
         return Money(cents - other.cents)
     }
 
-    override fun toString(): String {
+    fun asFormattedString(): String {
         val absoluteCents = abs(cents)
         val whole = absoluteCents / 100
         val fractional = absoluteCents % 100
@@ -23,4 +25,6 @@ value class Money(val cents: Long) {
 
         return "R $sign$whole.${fractional.toString().padStart(2, '0')}"
     }
+
+    override fun toString(): String = asFormattedString()
 }

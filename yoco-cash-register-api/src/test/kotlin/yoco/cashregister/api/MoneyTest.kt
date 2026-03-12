@@ -1,6 +1,6 @@
-package za.co
+package za.co.yoco.cashregister.api
 
-import za.co.yoco.cashregister.api.Money
+import za.co.yoco.cashregister.api.domain.Money
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
