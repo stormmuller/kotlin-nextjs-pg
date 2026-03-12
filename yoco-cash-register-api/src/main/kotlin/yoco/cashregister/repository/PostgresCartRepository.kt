@@ -2,8 +2,8 @@ package za.co.yoco.cashregister.repository
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upsert
@@ -25,17 +25,29 @@ class PostgresCartRepository(private val database: Database) : CartRepository {
         }
     }
 
-    override fun saveCart(cart: Cart) {
-        transaction(database) {
+    override fun createCart(): Cart {
+        return transaction(database) {
+            val stmt = Carts.insert { }
+            Cart(id = stmt[Carts.id])
+        }
+    }
+
+    override fun saveCart(cart: Cart): Cart {
+        return transaction(database) {
             Carts.upsert { it[id] = cart.id }
             Items.deleteWhere { cartId eq cart.id }
-            if (cart.items.isNotEmpty()) {
-                Items.batchInsert(cart.items) { item ->
-                    this[Items.id] = item.id
-                    this[Items.cartId] = cart.id
-                    this[Items.amountCents] = item.amount.cents
+            val savedItems = if (cart.items.isNotEmpty()) {
+                cart.items.map { item ->
+                    val savedItem = item.withGeneratedId()
+                    Items.insert {
+                        it[id] = savedItem.id
+                        it[cartId] = cart.id
+                        it[amountCents] = savedItem.amount.cents
+                    }
+                    savedItem
                 }
-            }
+            } else emptyList()
+            cart.copy(items = savedItems)
         }
     }
 }
