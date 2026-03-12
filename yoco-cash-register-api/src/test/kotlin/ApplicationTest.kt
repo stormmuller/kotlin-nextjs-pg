@@ -141,4 +141,36 @@ class ApplicationTest {
 
         assertEquals(HttpStatusCode.NotFound, response.status)
     }
+
+    @Test
+    fun `PUT carts cartId items itemId returns 400 when amountCents is negative`() = testApplication {
+        environment { config = testEnvironment() }
+        application { module() }
+
+        val cart = json.decodeFromString<Cart>(client.post("/carts") { csrfHeaders() }.bodyAsText())
+
+        val response = client.put("/carts/${cart.id}/items/item-1") {
+            csrfHeaders()
+            contentType(ContentType.Application.Json)
+            setBody("""{"amountCents":-1}""")
+        }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+    }
+
+    @Test
+    fun `PUT carts cartId items itemId returns 400 when amountCents exceeds maximum`() = testApplication {
+        environment { config = testEnvironment() }
+        application { module() }
+
+        val cart = json.decodeFromString<Cart>(client.post("/carts") { csrfHeaders() }.bodyAsText())
+
+        val response = client.put("/carts/${cart.id}/items/item-1") {
+            csrfHeaders()
+            contentType(ContentType.Application.Json)
+            setBody("""{"amountCents":100000001}""")
+        }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+    }
 }
