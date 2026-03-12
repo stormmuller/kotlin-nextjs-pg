@@ -65,14 +65,27 @@ class CashRegisterServiceImplTest {
     }
 
     @Test
-    fun `removeItemFromCart throws when item does not exist in cart`() {
+    fun `removeItemFromCart is idempotent when item does not exist in cart`() {
         val service = createService()
         val cart = service.createNewCart()
 
-        val exception = assertFailsWith<NoSuchElementException> {
-            service.removeItemFromCart(cart.id, "missing-item")
-        }
+        val result = service.removeItemFromCart(cart.id, "missing-item")
 
-        assertEquals("Item with id 'missing-item' was not found in cart '${cart.id}'", exception.message)
+        assertEquals(cart.id, result.id)
+        assertTrue(result.items.isEmpty())
+    }
+
+    @Test
+    fun `addItemToCart is idempotent for the same item id`() {
+        val service = createService()
+        val cart = service.createNewCart()
+        val item = Item(id = "item-1", amount = Money(1234))
+
+        service.addItemToCart(cart.id, item)
+        val result = service.addItemToCart(cart.id, item)
+
+        assertEquals(1, result.items.size)
+        assertEquals("item-1", result.items[0].id)
+        assertEquals(Money(1234), result.items[0].amount)
     }
 }
