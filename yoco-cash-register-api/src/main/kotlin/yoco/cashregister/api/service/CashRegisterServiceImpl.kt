@@ -3,29 +3,30 @@ package za.co.yoco.cashregister.api.service
 import java.util.UUID
 import za.co.yoco.cashregister.api.domain.Cart
 import za.co.yoco.cashregister.api.domain.Item
+import za.co.yoco.cashregister.api.domain.repository.CartRepository
 import za.co.yoco.cashregister.api.domain.service.CashRegisterService
 
-class CashRegisterServiceImpl : CashRegisterService {
-    private val carts = mutableMapOf<String, Cart>()
-
+class CashRegisterServiceImpl(
+    private val cartRepository: CartRepository
+) : CashRegisterService {
     override fun createNewCart(): Cart {
         val cart = Cart(id = UUID.randomUUID().toString())
-        carts[cart.id] = cart
+        cartRepository.saveCart(cart)
         return cart
     }
 
     override fun addItemToCart(cartId: String, item: Item): Cart {
-        val cart = carts[cartId]
+        val cart = cartRepository.getCart(cartId)
             ?: throw NoSuchElementException("Cart with id '$cartId' was not found")
 
         val updatedCart = cart.copy(items = cart.items + item)
-        carts[cartId] = updatedCart
+        cartRepository.saveCart(cart)
 
         return updatedCart
     }
 
     override fun removeItemFromCart(cartId: String, itemId: String): Cart {
-        val cart = carts[cartId]
+        val cart = cartRepository.getCart(cartId)
             ?: throw NoSuchElementException("Cart with id '$cartId' was not found")
 
         val itemExists = cart.items.any { it.id == itemId }
@@ -34,7 +35,7 @@ class CashRegisterServiceImpl : CashRegisterService {
         }
 
         val updatedCart = cart.copy(items = cart.items.filterNot { it.id == itemId })
-        carts[cartId] = updatedCart
+        cartRepository.saveCart(cart)
 
         return updatedCart
     }
