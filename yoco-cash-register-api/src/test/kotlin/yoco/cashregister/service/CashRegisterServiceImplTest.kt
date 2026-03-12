@@ -1,4 +1,4 @@
-package za.co.yoco.cashregister.api.service
+package za.co.yoco.cashregister.service
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

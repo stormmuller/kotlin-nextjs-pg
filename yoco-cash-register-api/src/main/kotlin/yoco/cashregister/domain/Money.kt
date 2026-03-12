@@ -1,4 +1,4 @@
-package za.co.yoco.cashregister.api.domain
+package za.co.yoco.cashregister.domain
 
 import kotlinx.serialization.Serializable
 import kotlin.math.abs

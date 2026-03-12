@@ -1,0 +1,15 @@
+.git
+.gitignore
+.gradle
+.idea
+.kotlin
+build
+out
+**/build
+**/.gradle
+**/.idea
+**/.kotlin
+*.iml
+*.log
+README.md
+Dockerfile

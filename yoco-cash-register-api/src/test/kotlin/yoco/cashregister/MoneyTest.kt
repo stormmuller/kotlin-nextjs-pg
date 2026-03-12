@@ -1,6 +1,6 @@
-package za.co.yoco.cashregister.api
+package za.co.yoco.cashregister
 
-import za.co.yoco.cashregister.api.domain.Money
+import za.co.yoco.cashregister.domain.Money
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -9,7 +9,7 @@ class MoneyTest {
 
     @Test
     fun createsMoneyFromCents() {
-        val money = Money(575)
+        val money = _root_ide_package_.za.co.yoco.cashregister.domain.Money(575)
 
         assertEquals(575L, money.cents)
         assertEquals("R 5.75", money.toString())
@@ -17,7 +17,7 @@ class MoneyTest {
 
     @Test
     fun createsMoneyFromDollarsAndCents() {
-        val money = Money(5, 75)
+        val money = _root_ide_package_.za.co.yoco.cashregister.domain.Money(5, 75)
 
         assertEquals(575L, money.cents)
         assertEquals("R 5.75", money.toString())
