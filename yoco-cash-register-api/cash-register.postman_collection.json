@@ -1,0 +1,144 @@
+{
+  "info": {
+    "_postman_id": "4e9617e8-a15f-4540-9d08-9fdb9f753187",
+    "name": "Yoco Cash Register",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1481906"
+  },
+  "item": [
+    {
+      "name": "Create New Cart",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. Parse the JSON response body\r",
+              "const responseData = pm.response.json();\r",
+              "\r",
+              "// 2. Extract the \"id\" property\r",
+              "const receivedId = responseData.id;\r",
+              "\r",
+              "// 3. Store it in an environment variable\r",
+              "// This allows you to use {{CART_ID}} in other request URLs or bodies\r",
+              "if (receivedId) {\r",
+              "    pm.environment.set(\"CART_ID\", receivedId);\r",
+              "    console.log(\"ID successfully saved: \" + receivedId);\r",
+              "} else {\r",
+              "    pm.expect.fail(\"ID not found in the response body\");\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Origin",
+            "value": "{{BASE_URL}}",
+            "type": "text"
+          },
+          {
+            "key": "X-CSRF-Token",
+            "value": "dummy",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/carts",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "carts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add item",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Origin",
+            "value": "{{BASE_URL}}",
+            "type": "text"
+          },
+          {
+            "key": "X-CSRF-Token",
+            "value": "dummy",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"amountCents\": 4000\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/carts/{{CART_ID}}/items/3",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "carts",
+            "{{CART_ID}}",
+            "items",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete item",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Origin",
+            "value": "{{BASE_URL}}",
+            "type": "text"
+          },
+          {
+            "key": "X-CSRF-Token",
+            "value": "dummy",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"amountCents\": 4000\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/carts/{{CART_ID}}/items/3",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "carts",
+            "{{CART_ID}}",
+            "items",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
