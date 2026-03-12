@@ -1,4 +1,4 @@
-package za.co.yoco.cashregister.api
+package za.co.yoco.cashregister.api.controllers
 
 import io.ktor.http.*
 import io.ktor.server.request.*
