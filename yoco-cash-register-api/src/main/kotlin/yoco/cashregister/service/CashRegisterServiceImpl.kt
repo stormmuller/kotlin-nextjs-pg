@@ -16,18 +16,13 @@ class CashRegisterServiceImpl(
         val cart = cartRepository.getCart(cartId)
             ?: throw NoSuchElementException("Cart with id '$cartId' was not found")
 
-        val updatedCart = cart.copy(items = cart.items + item)
+        val updatedCart = cart.copy(items = cart.items.filterNot { it.id == item.id } + item)
         return cartRepository.saveCart(updatedCart)
     }
 
     override fun removeItemFromCart(cartId: String, itemId: String): Cart {
         val cart = cartRepository.getCart(cartId)
             ?: throw NoSuchElementException("Cart with id '$cartId' was not found")
-
-        val itemExists = cart.items.any { it.id == itemId }
-        if (!itemExists) {
-            throw NoSuchElementException("Item with id '$itemId' was not found in cart '$cartId'")
-        }
 
         val updatedCart = cart.copy(items = cart.items.filterNot { it.id == itemId })
         return cartRepository.saveCart(updatedCart)
