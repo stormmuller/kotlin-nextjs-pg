@@ -3,14 +3,12 @@ FROM gradle:8.14.0-jdk21 AS build
 WORKDIR /app
 
 COPY gradle gradle
-COPY gradlew gradlew
-COPY gradlew.bat gradlew.bat
 COPY settings.gradle.kts settings.gradle.kts
 COPY build.gradle.kts build.gradle.kts
 COPY gradle.properties gradle.properties
 COPY src src
 
-RUN chmod +x gradlew && ./gradlew buildFatJar --no-daemon
+RUN gradle buildFatJar --no-daemon
 
 FROM eclipse-temurin:21-jre
 
